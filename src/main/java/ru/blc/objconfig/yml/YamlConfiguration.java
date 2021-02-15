@@ -67,6 +67,7 @@ public class YamlConfiguration extends FileConfiguration {
 	protected void parseToSections(ConfigurationSection section, Map<?, ?> input) {
 		if (input == null) return;
 		for (Entry<?, ?> entry : input.entrySet()) {
+			if (entry.getKey() == null) continue;
 			String key = entry.getKey().toString();
 			Object value = entry.getValue();
 			if (value instanceof Map) {
@@ -103,9 +104,7 @@ public class YamlConfiguration extends FileConfiguration {
 		YamlConfiguration config = new YamlConfiguration();
 		try {
 			config.load(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidConfigurationException e) {
+		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
 		return config;
@@ -116,9 +115,7 @@ public class YamlConfiguration extends FileConfiguration {
 		YamlConfiguration config = new YamlConfiguration();
 		try {
 			config.load(reader);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidConfigurationException e) {
+		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
 		return config;
