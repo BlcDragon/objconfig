@@ -59,6 +59,29 @@ public class MemorySection implements ConfigurationSection {
 		return keys;
 	}
 
+	@Override
+	public Set<String> getKeysDeep() {
+		Set<String> keys = new HashSet<>();
+		for (Entry<String, Object> entry : data.entrySet()) {
+			if (entry.getValue() instanceof List) {
+				List<?> list = (List<?>) entry.getValue();
+				for (Object obj :list) {
+					if (obj instanceof ConfigurationSection) {
+						keys.addAll(((ConfigurationSection)obj).getKeysDeep());
+					}else {
+						keys.add(getPath()+"."+entry.getKey());
+						break;
+					}
+				}
+			}else if (entry.getValue() instanceof ConfigurationSection){
+				keys.addAll(((ConfigurationSection)entry.getValue()).getKeysDeep());
+			}else {
+				keys.add(getPath()+"."+entry.getKey());
+			}
+		}
+		return keys;
+	}
+
 	public Map<String, Object> getValues() {
 		return new LinkedHashMap<String, Object>(data);
 	}

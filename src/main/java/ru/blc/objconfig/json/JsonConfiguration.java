@@ -10,6 +10,7 @@ import ru.blc.validate.Validate;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,10 +20,15 @@ public class JsonConfiguration extends FileConfiguration {
 
 	@Override
 	public void loadFromString(String source) throws InvalidConfigurationException {
+		loadFromString(source, StandardCharsets.UTF_8);
+	}
+
+	@Override
+	public void loadFromString(String source, Charset charset) throws InvalidConfigurationException {
 		if (source.isEmpty()) return;
-		InputStream in = new ByteArrayInputStream(source.getBytes(Charset.forName("UTF-8")));
+		InputStream in = new ByteArrayInputStream(source.getBytes(charset));
 		try {
-			JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+			JsonReader reader = new JsonReader(new InputStreamReader(in, charset));
 			reader.beginObject();
 			sectionFromJson(reader, this);
 			if (reader.peek()!=JsonToken.END_DOCUMENT) {
@@ -33,7 +39,7 @@ public class JsonConfiguration extends FileConfiguration {
 			throw new InvalidConfigurationException(source, e);
 		}
 	}
-	
+
 	protected void sectionFromJson(JsonReader reader, ConfigurationSection section) throws IOException, InvalidConfigurationException {
 		String name = "";
 		boolean namefounded = false;
@@ -162,9 +168,14 @@ public class JsonConfiguration extends FileConfiguration {
 
 	@Override
 	public String saveToString() {
+		return saveToString(StandardCharsets.UTF_8);
+	}
+
+	@Override
+	public String saveToString(Charset charset) {
 		OutputStream outputStream = new ByteArrayOutputStream();
 		try {
-			JsonWriter writer = new JsonWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+			JsonWriter writer = new JsonWriter(new OutputStreamWriter(outputStream, charset));
 			writer.beginObject();
 			sectionToJson(writer, this);
 			writer.endObject();
@@ -321,9 +332,7 @@ public class JsonConfiguration extends FileConfiguration {
 		JsonConfiguration config = new JsonConfiguration();
 		try {
 			config.load(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidConfigurationException e) {
+		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
 		return config;
@@ -334,9 +343,7 @@ public class JsonConfiguration extends FileConfiguration {
 		JsonConfiguration config = new JsonConfiguration();
 		try {
 			config.load(reader);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidConfigurationException e) {
+		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
 		return config;

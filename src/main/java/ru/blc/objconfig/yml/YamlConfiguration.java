@@ -1,18 +1,21 @@
 package ru.blc.objconfig.yml;
 
-import ru.blc.objconfig.ConfigurationSection;
-import ru.blc.objconfig.FileConfiguration;
-import ru.blc.objconfig.InvalidConfigurationException;
-import ru.blc.validate.Validate;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.representer.Representer;
+import ru.blc.objconfig.ConfigurationSection;
+import ru.blc.objconfig.FileConfiguration;
+import ru.blc.objconfig.InvalidConfigurationException;
+import ru.blc.validate.Validate;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,9 +34,14 @@ public class YamlConfiguration extends FileConfiguration {
 
 	@Override
 	public void loadFromString(String source) throws InvalidConfigurationException {
+		loadFromString(source, StandardCharsets.UTF_8);
+	}
+
+	@Override
+	public void loadFromString(String source, Charset charset) throws InvalidConfigurationException {
 		Validate.notNull(source, "Source cannot be null");
 		Map<?, ?> in;
-		Object res = yaml.load(source);
+		Object res = yaml.load(new ByteArrayInputStream(source.getBytes(charset)));
 		try {
 			in = (Map<?, ?>) res;
 		} catch (YAMLException arg3) {
@@ -43,7 +51,6 @@ public class YamlConfiguration extends FileConfiguration {
 		}
 		this.parseToSections(this, in);
 		this.header = readHeader(source);
-		
 	}
 
 	protected String readHeader(String source) {
@@ -92,6 +99,11 @@ public class YamlConfiguration extends FileConfiguration {
 
 	@Override
 	public String saveToString() {
+		return saveToString(StandardCharsets.UTF_8);
+	}
+
+	@Override
+	public String saveToString(Charset charset) {
 		this.dumperOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
 		this.representer.setDefaultFlowStyle(FlowStyle.BLOCK);
 		String dump = this.yaml.dump(this.getValues());

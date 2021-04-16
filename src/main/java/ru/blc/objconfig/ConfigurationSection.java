@@ -14,6 +14,8 @@ public interface ConfigurationSection {
 
 	Set<String> getKeys();
 
+	Set<String> getKeysDeep();
+
 	Map<String, Object> getValues();
 	
 	boolean hasValue(String path);
@@ -27,18 +29,18 @@ public interface ConfigurationSection {
 	ConfigurationSection createSection(String path);
 
 	/**
-	 * Создает секцию в конце списка
-	 * @param path путь до листа без номера секции
-	 * @return созданную секцию
+	 * РЎРѕР·РґР°РµС‚ СЃРµРєС†РёСЋ РІ РєРѕРЅС†Рµ СЃРїРёСЃРєР°
+	 * @param path РїСѓС‚СЊ РґРѕ Р»РёСЃС‚Р° Р±РµР· РЅРѕРјРµСЂР° СЃРµРєС†РёРё
+	 * @return СЃРѕР·РґР°РЅРЅСѓСЋ СЃРµРєС†РёСЋ
 	 */
 	ConfigurationSection createSectionAtList(String path);
 
 	ConfigurationSection createSection(String path, Map<String, Object> map);
 	
 	/**
-	 * Создает секцию в конце списка
-	 * @param path - путь до листа без номера секции
-	 * @return созданную секцию
+	 * РЎРѕР·РґР°РµС‚ СЃРµРєС†РёСЋ РІ РєРѕРЅС†Рµ СЃРїРёСЃРєР°
+	 * @param path - РїСѓС‚СЊ РґРѕ Р»РёСЃС‚Р° Р±РµР· РЅРѕРјРµСЂР° СЃРµРєС†РёРё
+	 * @return СЃРѕР·РґР°РЅРЅСѓСЋ СЃРµРєС†РёСЋ
 	 */
 	ConfigurationSection createSectionAtList(String path, Map<String, Object> map);
 
