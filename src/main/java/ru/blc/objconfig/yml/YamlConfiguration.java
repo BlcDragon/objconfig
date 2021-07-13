@@ -132,4 +132,11 @@ public class YamlConfiguration extends FileConfiguration {
 		}
 		return config;
 	}
+
+	public static <T> T loadToType(Reader reader, Class<T> type){
+		Validate.notNull(reader, "Reader cannot be null");
+		Validate.notNull(reader, "Type cannot be null");
+		YamlConfiguration config = new YamlConfiguration();
+		return config.yaml.loadAs(reader, type);
+	}
 }
