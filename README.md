@@ -1,16 +1,16 @@
 # objconfig - YAML\JSON Config Wrapper
 
 <div align="center">
-  <a href="https://github.com/BlcDragon/objconfig/blob/master/LICENSE.txt">
-    <img src="https://img.shields.io/github/license/BlcDragon/objconfig">
+  <a href="https://github.com/blcdragon/objconfig/blob/master/LICENSE.txt">
+    <img src="https://img.shields.io/github/license/blcdragon/objconfig">
   </a>
 
-  <a href="https://github.com/BlcDragon/objconfig/issues">
-    <img src="https://img.shields.io/github/issues/BlcDragon/objconfig">
+  <a href="https://github.com/blcdragon/objconfig/issues">
+    <img src="https://img.shields.io/github/issues/blcdragon/objconfig">
   </a>
 
-  <a href="https://github.com/BlcDragon/objconfig/pulls">
-    <img src="https://img.shields.io/github/issues-pr/BlcDragon/objconfig">
+  <a href="https://github.com/blcdragon/objconfig/pulls">
+    <img src="https://img.shields.io/github/issues-pr/blcdragon/objconfig">
   </a>
 
   <a href="https://jitpack.io/#BlcDragon/objconfig">
