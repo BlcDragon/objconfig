@@ -1,7 +1,7 @@
 # objconfig - YAML\JSON Config Wrapper
 
 <div align="center">
-  <a href="https://github.com/BlcDragon/objconfig/blob/master/LICENSE">
+  <a href="https://github.com/BlcDragon/objconfig/blob/master/LICENSE.txt">
     <img src="https://img.shields.io/github/license/BlcDragon/objconfig">
   </a>
 
