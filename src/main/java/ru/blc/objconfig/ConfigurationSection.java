@@ -92,27 +92,40 @@ public interface ConfigurationSection {
 
     /**
      * Ths map is copy, bat objects in map is <b>not</b> copies<br>
+     *
      * @return Map with all keys and values of current section
      */
     @NotNull Map<@NotNull String, @NotNull Object> getValues();
 
     /**
      * Check if value exists in specified path
+     *
      * @param path path to check
      * @return true if any value in specified path exists, otherwise false
      */
     boolean hasValue(@NotNull String path);
 
     /**
-     * Object in specified path
+     * Return object in specified path
+     *
      * @param path path to object
      * @return object in specified path or null if there isn't any object in this path
      */
     @Nullable Object get(@NotNull String path);
 
     /**
-     * Object in specified path
+     * Return object at specified path or throw exception
+     *
      * @param path path to object
+     * @return object at specified path
+     * @throws NullPointerException if there is no object at specified path
+     */
+    @NotNull Object getRequired(@NotNull String path);
+
+    /**
+     * Object in specified path
+     *
+     * @param path     path to object
      * @param defaults default value
      * @return object in specified path or default value if there isn't any object in this path
      */
@@ -122,19 +135,31 @@ public interface ConfigurationSection {
     /**
      * Set object at specified path.<br>
      * All necessary sections will be created
-     * @param path path to set
+     *
+     * @param path  path to set
      * @param param object to set. Null for remove object with current path
      */
     void set(@NotNull String path, @Nullable Object param);
 
     /**
      * Creates section in specified path<br>
-     * If there is section in this path - new section would not be created
+     * If section (or any other object) in specified path already exists - it will be erased
+     *
      * @param path path for section
      * @return created section
+     * @see ConfigurationSection#getOrCreateSection(String)
      */
     @NotNull ConfigurationSection createSection(@NotNull String path);
-    //at 2.0: If section (or any other object) in specified path already exists - it will be erased
+
+    /**
+     * Get section from specified path <br>
+     * If there is no section at specified path - it will be created
+     *
+     * @param path path for section
+     * @return section from path or new section at path
+     * @see ConfigurationSection#createSection(String)
+     */
+    @NotNull ConfigurationSection getOrCreateSection(@NotNull String path);
 
     /**
      * Creates section at the end of list at specified path<br>
@@ -147,40 +172,52 @@ public interface ConfigurationSection {
 
     /**
      * Creates section in specified path<br>
-     * If there is section in this path - new section would not be created
+     * If section (or any other object) in specified path already exists - it will be erased
+     *
      * @param path path for section
-     * @param map values for new section
+     * @param map  values for new section
      * @return created section
      */
     @NotNull ConfigurationSection createSection(@NotNull String path, @NotNull Map<@NotNull String, @NotNull Object> map);
-    //at 2.0: If section (or any other object) in specified path already exists - it will be erased
 
     /**
      * Creates section at the end of list at specified path<br>
      * If there is no list of section at specified path - it will be created (and old value erased)
      *
      * @param path path to list (without hash sigh and number)
-     * @param map values for new section
+     * @param map  values for new section
      * @return created section
      */
     @NotNull ConfigurationSection createSectionAtList(@NotNull String path, @NotNull Map<@NotNull String, @NotNull Object> map);
 
     /**
      * Check if object in specified path is {@link ConfigurationSection}
+     *
      * @param path path to object
      * @return true if object in specified path is {@link ConfigurationSection} and exists, othrwise false
      */
-    boolean isConfiguratinSection(@NotNull String path); //TODO fix name
+    boolean isConfigurationSection(@NotNull String path);
 
     /**
      * Returns configuration section from current path
+     *
      * @param path path to section
      * @return section from current path or null if there is no section in current path
      */
     @Nullable ConfigurationSection getConfigurationSection(@NotNull String path);
 
     /**
+     * Return section at specified path or throw exception
+     *
+     * @param path path to object
+     * @return section at specified path
+     * @throws NullPointerException if there is no section at specified path
+     */
+    @NotNull ConfigurationSection getConfigurationSectionRequired(@NotNull String path);
+
+    /**
      * Check if object in specified path is boolean
+     *
      * @param path path to object
      * @return true if object in specified path is boolean and exists, othrwise false
      */
@@ -189,15 +226,26 @@ public interface ConfigurationSection {
     /**
      * Returns boolean from specified path. <br>
      * If there is no boolean at specified path - returns false
+     *
      * @param path path to boolean
      * @return boolean at path
      */
     boolean getBoolean(@NotNull String path);
 
     /**
+     * Return boolean at specified path or throw exception
+     *
+     * @param path path to object
+     * @return object at specified path
+     * @throws NullPointerException if there is no object at specified path
+     */
+    boolean getBooleanRequired(@NotNull String path);
+
+    /**
      * Returns boolean from specified path. <br>
      * If there is no boolean at specified path - returns default value
-     * @param path path to boolean
+     *
+     * @param path     path to boolean
      * @param defaults default value
      * @return boolean at path or default value
      */
@@ -205,6 +253,7 @@ public interface ConfigurationSection {
 
     /**
      * Check if object in specified path is integer
+     *
      * @param path path to object
      * @return true if object in specified path is integer and exists, othrwise false
      */
@@ -213,6 +262,7 @@ public interface ConfigurationSection {
     /**
      * Returns integer from specified path. <br>
      * If there is no number at specified path - returns 0
+     *
      * @param path path to integer
      * @return integer at path
      * @apiNote If there is any number at specified path it will be cast to int with {@link Number#intValue()}
@@ -220,9 +270,19 @@ public interface ConfigurationSection {
     int getInt(@NotNull String path);
 
     /**
+     * Return int at specified path or throw exception
+     *
+     * @param path path to object
+     * @return object at specified path
+     * @throws NullPointerException if there is no object at specified path
+     */
+    int getIntRequired(@NotNull String path);
+
+    /**
      * Returns integer from specified path. <br>
      * If there is no number at specified path - returns defaults
-     * @param path path to integer
+     *
+     * @param path     path to integer
      * @param defaults default value
      * @return integer at path
      * @apiNote If there is any number at specified path it will be cast to int with {@link Number#intValue()}
@@ -231,6 +291,7 @@ public interface ConfigurationSection {
 
     /**
      * Check if object in specified path is long
+     *
      * @param path path to object
      * @return true if object in specified path is long and exists, othrwise false
      */
@@ -239,6 +300,7 @@ public interface ConfigurationSection {
     /**
      * Returns long from specified path. <br>
      * If there is no number at specified path - returns 0
+     *
      * @param path path to long
      * @return long at path
      * @apiNote If there is any number at specified path it will be cast to long with {@link Number#longValue()}
@@ -246,9 +308,19 @@ public interface ConfigurationSection {
     long getLong(@NotNull String path);
 
     /**
+     * Return long at specified path or throw exception
+     *
+     * @param path path to object
+     * @return object at specified path
+     * @throws NullPointerException if there is no object at specified path
+     */
+    long getLongRequired(@NotNull String path);
+
+    /**
      * Returns long from specified path. <br>
      * If there is no number at specified path - returns defaults
-     * @param path path to long
+     *
+     * @param path     path to long
      * @param defaults default value
      * @return long at path
      * @apiNote If there is any number at specified path it will be cast to long with {@link Number#longValue()}
@@ -257,6 +329,7 @@ public interface ConfigurationSection {
 
     /**
      * Check if object in specified path is double
+     *
      * @param path path to object
      * @return true if object in specified path is double and exists, othrwise false
      */
@@ -265,6 +338,7 @@ public interface ConfigurationSection {
     /**
      * Returns double from specified path. <br>
      * If there is no number at specified path - returns 0.0
+     *
      * @param path path to double
      * @return double at path
      * @apiNote If there is any number at specified path it will be cast to double with {@link Number#doubleValue()}
@@ -272,9 +346,19 @@ public interface ConfigurationSection {
     double getDouble(@NotNull String path);
 
     /**
+     * Return double at specified path or throw exception
+     *
+     * @param path path to object
+     * @return object at specified path
+     * @throws NullPointerException if there is no object at specified path
+     */
+    double getDoubleRequired(@NotNull String path);
+
+    /**
      * Returns double from specified path. <br>
      * If there is no number at specified path - returns defaults
-     * @param path path to double
+     *
+     * @param path     path to double
      * @param defaults default value
      * @return double at path
      * @apiNote If there is any number at specified path it will be cast to double with {@link Number#doubleValue()}
@@ -283,6 +367,7 @@ public interface ConfigurationSection {
 
     /**
      * Check if object in specified path is string
+     *
      * @param path path to object
      * @return true if object in specified path is string and exists, othrwise false
      */
@@ -291,6 +376,7 @@ public interface ConfigurationSection {
     /**
      * Returns string from specified path. <br>
      * If there is no string or any object at specified path - returns null
+     *
      * @param path path to string
      * @return string at path
      * @apiNote If there is any object at specified path it will be cast to string with {@link Object#toString()}
@@ -298,9 +384,19 @@ public interface ConfigurationSection {
     String getString(@NotNull String path);
 
     /**
+     * Return string at specified path or throw exception
+     *
+     * @param path path to object
+     * @return object at specified path
+     * @throws NullPointerException if there is no object at specified path
+     */
+    String getStringRequired(@NotNull String path);
+
+    /**
      * Returns string from specified path. <br>
      * If there is no string or any object at specified path - returns defaults
-     * @param path path to string
+     *
+     * @param path     path to string
      * @param defaults default value
      * @return string at path
      * @apiNote If there is any object at specified path it will be cast to string with {@link Object#toString()}
@@ -310,6 +406,7 @@ public interface ConfigurationSection {
 
     /**
      * Check if object in specified path is list
+     *
      * @param path path to object
      * @return true if object in specified path is list and exists, othrwise false
      */
@@ -317,7 +414,8 @@ public interface ConfigurationSection {
 
     /**
      * Returns list from specified path. <br>
-     * If there is no list at specified path - returns empty list
+     * If there is no list at specified path - returns null
+     *
      * @param path path to list
      * @return list at path
      */
@@ -326,7 +424,8 @@ public interface ConfigurationSection {
     /**
      * Returns list from specified path. <br>
      * If there is no list at specified path - returns defaults
-     * @param path path to list
+     *
+     * @param path     path to list
      * @param defaults default value
      * @return list at path
      */
@@ -336,6 +435,7 @@ public interface ConfigurationSection {
     /**
      * Returns list of ConfigurationSections from specified path. <br>
      * If there is no list at specified path, or it does not contain any ConfigurationSection - returns empty list
+     *
      * @param path path to list
      * @return list at path
      */
@@ -344,6 +444,7 @@ public interface ConfigurationSection {
     /**
      * Returns list of Strings from specified path. <br>
      * If there is no list at specified path, or it does not contain any String or primitive - returns empty list
+     *
      * @param path path to list
      * @return list at path
      * @apiNote If there is any primitive at specified path it will be cast to string with {@link String#valueOf(Object)}
@@ -353,6 +454,7 @@ public interface ConfigurationSection {
     /**
      * Returns list of Integers from specified path. <br>
      * If there is no list at specified path, or it does not contain any Integers - returns empty list
+     *
      * @param path path to list
      * @return list at path
      * @apiNote Numbers will cast with {@link Number#intValue()}, Strings will be cast with {@link Integer#parseInt(String)}
@@ -362,6 +464,7 @@ public interface ConfigurationSection {
     /**
      * Returns list of booleans from specified path. <br>
      * If there is no list at specified path, or it does not contain any booleans - returns empty list
+     *
      * @param path path to list
      * @return list at path
      * @apiNote Strings will be cast
@@ -371,6 +474,7 @@ public interface ConfigurationSection {
     /**
      * Returns list of Doubles from specified path. <br>
      * If there is no list at specified path, or it does not contain any Doubles - returns empty list
+     *
      * @param path path to list
      * @return list at path
      * @apiNote Numbers will cast with {@link Number#doubleValue()}, Strings will be cast with {@link Double#parseDouble(String)}
@@ -380,6 +484,7 @@ public interface ConfigurationSection {
     /**
      * Returns list of Floats from specified path. <br>
      * If there is no list at specified path, or it does not contain any Floats - returns empty list
+     *
      * @param path path to list
      * @return list at path
      * @apiNote Numbers will cast with {@link Number#floatValue()}, Strings will be cast with {@link Float#parseFloat(String)}
@@ -389,6 +494,7 @@ public interface ConfigurationSection {
     /**
      * Returns list of Longs from specified path. <br>
      * If there is no list at specified path, or it does not contain any Longs - returns empty list
+     *
      * @param path path to list
      * @return list at path
      * @apiNote Numbers will cast with {@link Number#longValue()}, Strings will be cast with {@link Long#parseLong(String)}
@@ -398,6 +504,7 @@ public interface ConfigurationSection {
     /**
      * Returns list of Shorts from specified path. <br>
      * If there is no list at specified path, or it does not contain any Shorts - returns empty list
+     *
      * @param path path to list
      * @return list at path
      * @apiNote Numbers will cast with {@link Number#shortValue()}, Strings will be cast with {@link Short#parseShort(String)}
@@ -407,6 +514,7 @@ public interface ConfigurationSection {
     /**
      * Returns list of Bytes from specified path. <br>
      * If there is no list at specified path, or it does not contain any Bytes - returns empty list
+     *
      * @param path path to list
      * @return list at path
      * @apiNote Numbers will cast with {@link Number#byteValue()}, Strings will be cast with {@link Byte#parseByte(String)}
@@ -416,6 +524,7 @@ public interface ConfigurationSection {
     /**
      * Returns list of Bytes from specified path. <br>
      * If there is no list at specified path, or it does not contain any Bytes - returns empty list
+     *
      * @param path path to list
      * @return list at path
      * @apiNote Numbers will cast with {@link Number#byteValue()}, Strings will be cast with {@link Byte#parseByte(String)}
@@ -423,17 +532,17 @@ public interface ConfigurationSection {
     List<Character> getCharacterList(@NotNull String path);
 
     /**
-     * @deprecated for removal <br> use {@link ConfigurationSection#getBooleanList(String)} instead
      * @param path path to list
      * @return list at path
+     * @deprecated for removal <br> use {@link ConfigurationSection#getBooleanList(String)} instead
      */
     @Deprecated
     List<Boolean> getListBoolean(@NotNull String path);
 
     /**
-     * @deprecated for removal <br> all maps cast to sections
      * @param path path to map
      * @return map at specified path
+     * @deprecated for removal <br> all maps cast to sections
      */
     @Deprecated
     @NotNull List<Map<?, ?>> getMapList(@NotNull String path);

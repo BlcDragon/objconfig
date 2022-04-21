@@ -130,6 +130,19 @@ public class MemorySection implements ConfigurationSection {
     }
 
     @Override
+    public @NotNull Object getRequired(@NotNull String path) {
+        return getRequired0(path, Object.class);
+    }
+
+    protected <T> @NotNull T getRequired0(@NotNull String path, @NotNull Class<T> clazz) {
+        Object result = get(path);
+        if (!clazz.isInstance(result))
+            throw new NullPointerException("Required " + clazz.getSimpleName() + " at " + path);
+        //noinspection unchecked
+        return (T) result;
+    }
+
+    @Override
     public Object get(@NotNull String path, Object defaults) {
         Object result = get(path);
         return result == null ? defaults : result;
@@ -201,8 +214,7 @@ public class MemorySection implements ConfigurationSection {
     @Override
     public @NotNull ConfigurationSection createSection(@NotNull String path) {
         Preconditions.checkArgument(!path.isEmpty(), "Cannot create section at empty path");
-        ConfigurationSection result = this.getConfigurationSection(path);
-        if (result != null) return result;
+        ConfigurationSection result;
         if (path.contains(".")) {
             String sectionPath = path.substring(0, path.indexOf('.'));
             path = path.substring(path.indexOf('.') + 1);
@@ -216,6 +228,13 @@ public class MemorySection implements ConfigurationSection {
             result = new MemorySection(this, path);
             setToData(path, result);
         }
+        return result;
+    }
+
+    @Override
+    public @NotNull ConfigurationSection getOrCreateSection(@NotNull String path) {
+        ConfigurationSection result = getConfigurationSection(path);
+        if (result == null) result = createSection(path);
         return result;
     }
 
@@ -243,7 +262,7 @@ public class MemorySection implements ConfigurationSection {
     }
 
     @Override
-    public boolean isConfiguratinSection(@NotNull String path) {
+    public boolean isConfigurationSection(@NotNull String path) {
         return this.get(path) instanceof ConfigurationSection;
     }
 
@@ -251,6 +270,11 @@ public class MemorySection implements ConfigurationSection {
     public @Nullable ConfigurationSection getConfigurationSection(@NotNull String path) {
         Object res = this.get(path);
         return (ConfigurationSection) (res instanceof ConfigurationSection ? res : null);
+    }
+
+    @Override
+    public @NotNull ConfigurationSection getConfigurationSectionRequired(@NotNull String path) {
+        return getRequired0(path, ConfigurationSection.class);
     }
 
     @Override
@@ -262,6 +286,11 @@ public class MemorySection implements ConfigurationSection {
     @Override
     public boolean getBoolean(@NotNull String path) {
         return getBoolean(path, false);
+    }
+
+    @Override
+    public boolean getBooleanRequired(@NotNull String path) {
+        return getRequired0(path, Boolean.class);
     }
 
     @Override
@@ -282,6 +311,11 @@ public class MemorySection implements ConfigurationSection {
     }
 
     @Override
+    public int getIntRequired(@NotNull String path) {
+        return getRequired0(path, Number.class).intValue();
+    }
+
+    @Override
     public int getInt(@NotNull String path, int defaults) {
         Object res = get(path, defaults);
         return res instanceof Number ? ((Number) res).intValue() : defaults;
@@ -296,6 +330,11 @@ public class MemorySection implements ConfigurationSection {
     @Override
     public long getLong(@NotNull String path) {
         return getLong(path, 0);
+    }
+
+    @Override
+    public long getLongRequired(@NotNull String path) {
+        return getRequired0(path, Number.class).longValue();
     }
 
     @Override
@@ -316,6 +355,11 @@ public class MemorySection implements ConfigurationSection {
     }
 
     @Override
+    public double getDoubleRequired(@NotNull String path) {
+        return getRequired0(path, Number.class).doubleValue();
+    }
+
+    @Override
     public double getDouble(@NotNull String path, double defaults) {
         Object res = get(path, defaults);
         return res instanceof Number ? ((Number) res).doubleValue() : defaults;
@@ -330,6 +374,11 @@ public class MemorySection implements ConfigurationSection {
     @Override
     public String getString(@NotNull String path) {
         return getString(path, null);
+    }
+
+    @Override
+    public String getStringRequired(@NotNull String path) {
+        return getRequired0(path, Object.class).toString();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -522,7 +571,8 @@ public class MemorySection implements ConfigurationSection {
             } else if (object instanceof String) {
                 try {
                     result.add(Byte.parseByte((String) object));
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) {
+                }
             } else if (object instanceof Character) {
                 result.add((byte) ((Character) object).charValue());
             } else if (object instanceof Number) {
