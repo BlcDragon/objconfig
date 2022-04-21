@@ -1,5 +1,6 @@
 package ru.blc.objconfig.yml;
 
+import com.google.common.base.Preconditions;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
@@ -8,7 +9,6 @@ import org.yaml.snakeyaml.representer.Representer;
 import ru.blc.objconfig.ConfigurationSection;
 import ru.blc.objconfig.FileConfiguration;
 import ru.blc.objconfig.InvalidConfigurationException;
-import ru.blc.validate.Validate;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -39,7 +39,7 @@ public class YamlConfiguration extends FileConfiguration {
 
 	@Override
 	public void loadFromString(String source, Charset charset) throws InvalidConfigurationException {
-		Validate.notNull(source, "Source cannot be null");
+		Preconditions.checkNotNull(source, "Source cannot be null");
 		Map<?, ?> in;
 		Object res = yaml.load(new ByteArrayInputStream(source.getBytes(charset)));
 		try {
@@ -112,7 +112,7 @@ public class YamlConfiguration extends FileConfiguration {
 	}
 
 	public static YamlConfiguration loadConfiguration(File file) {
-		Validate.notNull(file, "File cannot be null");
+		Preconditions.checkNotNull(file, "File cannot be null");
 		YamlConfiguration config = new YamlConfiguration();
 		try {
 			config.load(file);
@@ -123,7 +123,7 @@ public class YamlConfiguration extends FileConfiguration {
 	}
 
 	public static YamlConfiguration loadConfiguration(Reader reader) {
-		Validate.notNull(reader, "Reader cannot be null");
+		Preconditions.checkNotNull(reader, "Reader cannot be null");
 		YamlConfiguration config = new YamlConfiguration();
 		try {
 			config.load(reader);
@@ -134,8 +134,8 @@ public class YamlConfiguration extends FileConfiguration {
 	}
 
 	public static <T> T loadToType(Reader reader, Class<T> type){
-		Validate.notNull(reader, "Reader cannot be null");
-		Validate.notNull(reader, "Type cannot be null");
+		Preconditions.checkNotNull(reader, "Reader cannot be null");
+		Preconditions.checkNotNull(type, "Type cannot be null");
 		YamlConfiguration config = new YamlConfiguration();
 		return config.yaml.loadAs(reader, type);
 	}

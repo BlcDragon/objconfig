@@ -1,7 +1,7 @@
 package ru.blc.objconfig;
 
+import com.google.common.base.Preconditions;
 import com.google.common.io.Files;
-import ru.blc.validate.Validate;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -15,7 +15,7 @@ public abstract class FileConfiguration extends MemorySection {
 	}
 
 	public void load(String file, Charset charset) throws IOException, InvalidConfigurationException {
-		Validate.notNull(file, "File cannot be null");
+		Preconditions.checkNotNull(file, "File cannot be null");
 		load(new File(file));
 	}
 
@@ -24,7 +24,7 @@ public abstract class FileConfiguration extends MemorySection {
 	}
 
 	public void load(File file, Charset charset) throws IOException, InvalidConfigurationException {
-		Validate.notNull(file, "File cannot be null");
+		Preconditions.checkNotNull(file, "File cannot be null");
 		FileInputStream stream = new FileInputStream(file);
 		this.load(new InputStreamReader(stream, charset));
 	}
@@ -49,7 +49,7 @@ public abstract class FileConfiguration extends MemorySection {
 	}
 
 	public void save(String file, Charset charset) throws IOException {
-		Validate.notNull(file, "File cannot be null");
+		Preconditions.checkNotNull(file, "File cannot be null");
 		save(new File(file), charset);
 	}
 	
@@ -58,7 +58,7 @@ public abstract class FileConfiguration extends MemorySection {
 	}
 
 	public void save(File file, Charset charset) throws IOException {
-		Validate.notNull(file, "File cannot be null");
+		Preconditions.checkNotNull(file, "File cannot be null");
 		Files.createParentDirs(file);
 		String data = this.saveToString();
 		try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), charset)) {

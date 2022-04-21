@@ -1,12 +1,12 @@
 package ru.blc.objconfig.json;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import ru.blc.objconfig.ConfigurationSection;
 import ru.blc.objconfig.FileConfiguration;
 import ru.blc.objconfig.InvalidConfigurationException;
-import ru.blc.validate.Validate;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -317,7 +317,7 @@ public class JsonConfiguration extends FileConfiguration {
 	}
 	
 	public static JsonConfiguration loadConfiguration(String json) {
-		Validate.notNull(json, "Source string cannot be null");
+		Preconditions.checkNotNull(json, "Source string cannot be null");
 		JsonConfiguration config = new JsonConfiguration();
 		try {
 			config.loadFromString(json);
@@ -328,7 +328,7 @@ public class JsonConfiguration extends FileConfiguration {
 	}
 	
 	public static JsonConfiguration loadConfiguration(File file) {
-		Validate.notNull(file, "File cannot be null");
+		Preconditions.checkNotNull(file, "File cannot be null");
 		JsonConfiguration config = new JsonConfiguration();
 		try {
 			config.load(file);
@@ -339,7 +339,7 @@ public class JsonConfiguration extends FileConfiguration {
 	}
 
 	public static JsonConfiguration loadConfiguration(Reader reader) {
-		Validate.notNull(reader, "Reader cannot be null");
+		Preconditions.checkNotNull(reader, "Reader cannot be null");
 		JsonConfiguration config = new JsonConfiguration();
 		try {
 			config.load(reader);

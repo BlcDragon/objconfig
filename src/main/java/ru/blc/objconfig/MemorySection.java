@@ -1,6 +1,6 @@
 package ru.blc.objconfig;
 
-import ru.blc.validate.Validate;
+import com.google.common.base.Preconditions;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -16,8 +16,8 @@ public class MemorySection implements ConfigurationSection {
 	}
 
 	protected MemorySection(ConfigurationSection parent, String name) {
-		Validate.notNull(parent, "Parent can not be null");
-		Validate.notEmpty(name, "Name can not be empty or null");
+		Preconditions.checkNotNull(parent, "Parent can not be null");
+		Preconditions.checkArgument(!name.isEmpty(), "Name can not be empty or null");
 		this.key = name;
 		this.parent = parent;
 	}
@@ -177,7 +177,7 @@ public class MemorySection implements ConfigurationSection {
 	}
 
 	public void set(String path, Object param) {
-		Validate.notEmpty(path, "Cannot set to an empty path");
+		Preconditions.checkArgument(!path.isEmpty(), "Cannot set to an empty path");
 		if (path.contains(".")) {
 			String sectionPath = path.substring(0, path.lastIndexOf('.'));
 			String valPath = path.substring(path.lastIndexOf('.') + 1);
@@ -191,7 +191,7 @@ public class MemorySection implements ConfigurationSection {
 	}
 
 	public ConfigurationSection createSection(String path) {
-		Validate.notEmpty(path, "Cannot create section at empty path");
+		Preconditions.checkArgument(!path.isEmpty(), "Cannot create section at empty path");
 		ConfigurationSection result = this.getConfigurationSection(path);
 		if (result != null) return result;
 		if (path.contains(".")) {
