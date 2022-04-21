@@ -112,6 +112,24 @@ public class YamlConfiguration extends FileConfiguration {
         return header + dump;
     }
 
+
+    /**
+     * Load yaml from string
+     *
+     * @param yaml string to load
+     * @return yaml configuration from string
+     */
+    public static @NotNull YamlConfiguration loadConfiguration(@NotNull String yaml) {
+        Preconditions.checkNotNull(yaml, "Source string cannot be null");
+        YamlConfiguration config = new YamlConfiguration();
+        try {
+            config.loadFromString(yaml);
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+        return config;
+    }
+
     /**
      * Load yaml from file
      *
