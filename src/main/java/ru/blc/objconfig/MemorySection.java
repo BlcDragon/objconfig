@@ -82,7 +82,11 @@ public class MemorySection implements ConfigurationSection {
             } else if (entry.getValue() instanceof ConfigurationSection) {
                 keys.addAll(((ConfigurationSection) entry.getValue()).getKeysDeep());
             } else {
-                keys.add(getPath() + "." + entry.getKey());
+                String path = getPath();
+                if (!path.isEmpty()) {
+                    path += ".";
+                }
+                keys.add(path + entry.getKey());
             }
         }
         return keys;
