@@ -30,14 +30,30 @@ public class JsonConfiguration extends FileConfiguration {
         InputStream in = new ByteArrayInputStream(source.getBytes(charset));
         try {
             JsonReader reader = new JsonReader(new InputStreamReader(in, charset));
-            reader.beginObject();
-            sectionFromJson(reader, this);
-            if (reader.peek() != JsonToken.END_DOCUMENT) {
-                throw new InvalidConfigurationException("JSON parsed but document not ended");
-            }
+//            reader.beginObject();
+            rootFromJson(reader);
+//            if (reader.peek() != JsonToken.END_DOCUMENT) {
+//                throw new InvalidConfigurationException("JSON parsed but document not ended");
+//            }
             reader.close();
         } catch (IOException e) {
             throw new InvalidConfigurationException(source, e);
+        }
+    }
+
+    protected void rootFromJson(JsonReader reader) throws IOException, InvalidConfigurationException {
+        while (reader.hasNext()) {
+            JsonToken jsonToken = reader.peek();
+            switch (jsonToken) {
+                case BEGIN_ARRAY:
+                    reader.beginArray();
+                    this.set("root", arrayFromJson(reader, "root", this));
+                    break;
+                case BEGIN_OBJECT:
+                    reader.beginObject();
+                    sectionFromJson(reader, this);
+                    break;
+            }
         }
     }
 
